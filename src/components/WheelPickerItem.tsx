@@ -58,11 +58,13 @@ const Text = styled.p`
 
 export interface WheelPickerItemProps {
   id: string;
+  isDisabled: boolean;
   value: string | number;
   activeID: string;
   height: number;
   color: string;
   activeColor: string;
+  disabledColor: string;
   fontSize: number;
   onClick?: MouseEventHandler;
   onFocus?: FocusEventHandler;
@@ -74,8 +76,10 @@ const WheelPickerItem: React.FC<WheelPickerItemProps> = (
     value,
     activeID,
     height,
+    isDisabled,
     color,
     activeColor,
+    disabledColor,
     fontSize,
     onClick,
     onFocus
@@ -83,10 +87,11 @@ const WheelPickerItem: React.FC<WheelPickerItemProps> = (
   ref
 ) => {
   const selected = useMemo(() => id === activeID, [id, activeID]);
-  const textColor = useMemo(() => (selected ? activeColor : color), [
+  const textColor = useMemo(() => (isDisabled ? disabledColor : selected ? activeColor : color), [
     activeColor,
     color,
-    selected
+    selected,
+    isDisabled,
   ]);
   const textStyle = useMemo(
     () => ({
@@ -105,8 +110,8 @@ const WheelPickerItem: React.FC<WheelPickerItemProps> = (
       data-itemid={id}
       data-itemvalue={value}
       height={height}
-      onClick={onClick}
-      onFocus={onFocus}
+      onClick={!isDisabled ? onClick : () => {}}
+      onClick={!isDisabled ? onFocus : () => {}}
       tabIndex={0}
     >
       {selected && <Icon fontSize={fontSize}>&#10003;</Icon>}
