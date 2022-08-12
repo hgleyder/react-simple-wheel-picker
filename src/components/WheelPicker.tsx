@@ -49,6 +49,7 @@ const setStyles = (styles: {
   width?: number;
   color?: string;
   activeColor?: string;
+  disabledColor?: string;            
   fontSize?: number;
   backgroundColor?: string;
   shadowColor?: string;
@@ -62,6 +63,7 @@ const setStyles = (styles: {
     backgroundColor: styles.backgroundColor || "#555",
     shadowColor: styles.shadowColor || "#333",
     width: styles.width ? `${styles.width}px` : "100%",
+    disabledColor: styles.disabledColor || "#E6E9EB",
     focusColor: styles.focusColor ? styles.focusColor : "blue"
   };
 };
@@ -73,6 +75,7 @@ export interface PickerData {
 
 export interface WheelPickerProps {
   data: PickerData[];
+  disabledData?: PickerData[];
   selectedID: string;
   onChange: (data: PickerData) => void;
   height: number;
@@ -88,11 +91,13 @@ export interface WheelPickerProps {
   backgroundColor?: string;
   shadowColor?: string;
   focusColor?: string;
+  disabledColor?: string;
 }
 
 const WheelPicker: React.FC<WheelPickerProps> = (
   {
     data,
+    disabledData = [],
     selectedID,
     onChange,
     height,
@@ -103,6 +108,7 @@ const WheelPicker: React.FC<WheelPickerProps> = (
     width,
     color,
     activeColor,
+    disabledColor,
     fontSize,
     backgroundColor,
     shadowColor,
@@ -125,6 +131,7 @@ const WheelPicker: React.FC<WheelPickerProps> = (
         width,
         color,
         activeColor,
+        disabledColor,
         fontSize,
         backgroundColor,
         shadowColor,
@@ -132,6 +139,7 @@ const WheelPicker: React.FC<WheelPickerProps> = (
       }),
     [
       activeColor,
+      disabledColor,
       backgroundColor,
       color,
       focusColor,
@@ -217,6 +225,7 @@ const WheelPicker: React.FC<WheelPickerProps> = (
           key={item.id}
           {...item}
           {...styles}
+          isDisabled={disabledData.some(dd => dd.id === item.id)}
           height={_itemHeight}
           activeID={activeID}
           onClick={handleOnClick}
